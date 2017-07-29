@@ -1,5 +1,10 @@
-import numpy as np
 import cv2
+import argparse
+import numpy as np
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-f","--filename", help="Name of the file", default="better.png")
+args = parser.parse_args()
 
 def chroma420(img):
     imgYCC = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
@@ -86,8 +91,7 @@ def resizeToIMG(ref, dst):
     return cv2.resize(dst, (width, height),
             interpolation=cv2.INTER_CUBIC)
 
-
-img = cv2.imread('chroma_2.jpg')
+img = cv2.imread(args.filename)
 
 img420 = chroma420(img)
 img411 = chroma411(img)
@@ -95,12 +99,13 @@ img422 = chroma422(img)
 img440 = chroma440(img)
 img410 = chroma410(img)
 
-cv2.imshow('Output 420', img420)
-cv2.imshow('Output 411', img411)
-cv2.imshow('Output 422', img422)
-cv2.imshow('Output 440', img440)
-cv2.imshow('Output 410', img410)
-cv2.imshow('Original', img)
+uimg = np.hstack((img,      img420))
+uimg = np.hstack((uimg,     img411))
+limg = np.hstack((img422,   img440))
+limg = np.hstack((limg,     img410))
+img =  np.vstack((uimg,     limg))
+
+cv2.imshow('Multiple Results', img)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

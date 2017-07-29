@@ -12,11 +12,11 @@ def generateRGB():
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--width", type=int, 
-        help="The Width of the image.",default=15)
+        help="The Width of the image.",default=6)
 parser.add_argument("-e", "--height", type=int, 
-        help="The Height of the image.", default=18)
+        help="The Height of the image.", default=5)
 parser.add_argument("-p", "--pixel", type=int, 
-        help="The Size of the pixel", default=25)
+        help="The Size of the pixel", default=100)
 
 #> Colors
 parser.add_argument("-c1", "--color1", help="Color one", 
@@ -33,7 +33,12 @@ args = parser.parse_args()
 #---------------------------------------------------------------------
 
 def cvtHEX2RGB(hex):
-    if not isinstance(hex, (str,bytes)):
+    try:
+        basestring = basestring
+    except:
+        basestring = (str,bytes)
+
+    if not isinstance(hex, basestring):
         return hex
     return [int(hex[i:i+2], 16) for i in range(1,6,2)]
 
