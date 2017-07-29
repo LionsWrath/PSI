@@ -33,8 +33,26 @@ args = parser.parse_args()
 
 #---------------------------------------------------------------------
 
+def createColorBlock(color):
+    block = np.zeros((psize, psize,3), np.uint8)
+    block[:,:,:3] = color
+
+    return block
+
+def createColorColumn(gradient):
+    base = [createColorBlock(gradient[0])]
+    [base.append(np.vstack((base[-1], createColorBlock(c)))) for c in gradient[1:]]
+
+    return base[-1]
+
+def createImage(colors):
+    base = [createColorColumn(colors[0])]
+    [base.append(np.hstack((base[-1], createColorColumn(g)))) for g in colors[1:]]
+
+    return base[-1]
+
 def cvtHEX2RGB(hex):
-    if not isinstance(hex, basestring):
+    if not isinstance(hex, (str,bytes)):
         return hex
     return [int(hex[i:i+2], 16) for i in range(1,6,2)]
 
@@ -60,17 +78,7 @@ ctop = create_gradient(args.color1, args.color2, sx)
 cbot = create_gradient(args.color3, args.color4, sx)
 
 colors = [create_gradient(t, b, sy) for t,b in zip(ctop, cbot)]
-
-row,col = np.indices((psize, psize))
-
-row = [ row*i for i in np.arange(sx) ]
-col = [ col*j for j in np.arange(sy) ]
-
-print len(row)
-print len(col)
-
-img = np.zeros((psize*sx, psize*sy,3), np.uint8)
-img[col, row] = np.array(colors)
+img = createImage(colors)
 
 cv2.imwrite('gradient.jpg', img)
 cv2.imshow('gradient', img)

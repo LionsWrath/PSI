@@ -2,7 +2,6 @@ import cv2
 import argparse
 import numpy as np
 from random import randint
-import matplotlib.pyplot as plt
 
 def generateRGB():
     r = randint(0, 255)
@@ -34,7 +33,7 @@ args = parser.parse_args()
 #---------------------------------------------------------------------
 
 def cvtHEX2RGB(hex):
-    if not isinstance(hex, basestring):
+    if not isinstance(hex, (str,bytes)):
         return hex
     return [int(hex[i:i+2], 16) for i in range(1,6,2)]
 
