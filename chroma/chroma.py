@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-f","--filename", help="Name of the file", default="better.png")
+parser.add_argument("-f","--filename", help="Name of the file", default="lena.jpg")
 args = parser.parse_args()
 
 def chroma420(img):
@@ -107,5 +107,8 @@ img =  np.vstack((uimg,     limg))
 
 cv2.imshow('Multiple Results', img)
 
-cv2.waitKey(0)
+while True:
+    k = cv2.waitKey(1) & 0xff
+    if k == 27:
+        break
 cv2.destroyAllWindows()
