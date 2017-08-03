@@ -83,5 +83,8 @@ img = createImage(colors)
 cv2.imwrite('gradient.jpg', img)
 cv2.imshow('gradient', img)
 
-cv2.waitKey(0)
+while True:
+    k = cv2.waitKey(1) & 0xff
+    if k == 27:
+        break
 cv2.destroyAllWindows()
